@@ -1,11 +1,10 @@
 import axios, {AxiosResponse} from 'axios'; 
- import { DEV_SERVER } from './constants'; 
- import { PostListResponse, CreatePostData, PostQueryArgs } from './types';
+ import { SinglePostResponse, PostListResponse, CreatePostData, PostQueryArgs, PostInterface } from './types';
   
-//  const baseDomain = process.env.NODE_ENV === 'development' ? DEV_SERVER : process.env.REACT_APP_PROD_SERVER; 
+//  const baseDomain = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_DEV_SERVER : process.env.REACT_APP_PROD_SERVER; 
   
 const axiosInstance = axios.create({ 
-   baseURL: `http://localhost:8000/api`, 
+   baseURL: `https://five0fin.onrender.com/api`, 
 }); 
   
   
@@ -17,7 +16,7 @@ const axiosInstance = axios.create({
      .join('&'); 
  };
 
- export const getPosts = async (queryParams: PostQueryArgs): Promise<PostListResponse[]> => {
+ export const getPosts = async (queryParams: object): Promise<PostListResponse[]> => {
   try {
     const query = serializeQuery({ ...queryParams });
     const response: AxiosResponse<PostListResponse[]> = await axiosInstance.get(`/posts/?${query}`);
@@ -29,25 +28,19 @@ const axiosInstance = axios.create({
   }
 };
 
-export const getPost = async (postIdOrSlug: string): Promise<PostListResponse> => {
+export const getPost = async (identifier: string): Promise<SinglePostResponse> => {
   try {
-    const response: AxiosResponse<PostListResponse> = await axiosInstance.get(`/posts/${postIdOrSlug}`);
-    const postData: PostListResponse = response.data;
-    return postData;
+    const response: AxiosResponse<SinglePostResponse> = await axiosInstance.get(`/posts/${identifier}`);
+    return response.data;
   } catch (error: any) {
     throw new Error(error.response.data);
   }
 };
 
-// export const getPost = async (id: string): Promise<AxiosResponse<PostListResponse>> => {
-//   return axios.get(`/api/v1/posts/${id}`);
-// };
-
-export const createPost = async (data: CreatePostData): Promise<PostListResponse> => {
+export const createPost = async (data: CreatePostData): Promise<PostInterface> => {
   try {
-    const response: AxiosResponse<PostListResponse> = await axiosInstance.post('/posts/', data);
-    const postData: PostListResponse = response.data;
-    return postData;
+    const response: AxiosResponse<PostInterface> = await axiosInstance.post('/posts/', data);
+    return response.data;
   } catch (error: any) {
     throw new Error(error.response.data);
   }

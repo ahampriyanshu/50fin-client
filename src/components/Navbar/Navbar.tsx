@@ -1,18 +1,13 @@
-import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { getDefaultTheme } from "../../utils";
 import logo from "/logo.png";
 
 function Navbar() {
-  const [theme, setTheme] = useState<string>(() => {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      const storedPrefs = window.localStorage.getItem('color-theme');
-      if (typeof storedPrefs === 'string') return storedPrefs;
-      const userMedia = window.matchMedia('(prefers-color-scheme: dark)');
-      if (userMedia.matches) return 'dark';
-    }
-    return 'light';
-  });
-
+  const navigate = useNavigate();
+  const [query, setQuery] = useState('');
+  const [theme, setTheme] = useState<string>(getDefaultTheme());
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const rawSetTheme = (rawTheme: string) => {
     const root = window?.document?.documentElement;
     const isDark = rawTheme === 'dark';
@@ -27,8 +22,20 @@ function Navbar() {
     rawSetTheme(theme);
   }, [theme]);
 
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  
   const toggleMenu = () => setIsMenuOpen(prev => !prev);
+  const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate(`/?query=${encodeURIComponent(query)}`);
+    setQuery('');
+  };
+
+  const handleChange = (e) => {
+    setQuery(e.target.value);
+  };
 
   return (
     <>
@@ -42,8 +49,8 @@ function Navbar() {
             </div>
             <div className="hidden sm:flex sm:items-center sm:ml-6">
               <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="p-2 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md dark:text-yellow-400 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-yellow-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50"
+              onClick={toggleTheme}
+                className="p-2 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md dark:text-yellow-400 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-yellow-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700"
               >
                 <svg
                   className="w-5 h-5"
@@ -52,20 +59,20 @@ function Navbar() {
                   fill="currentColor"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   ></path>
                 </svg>
               </button>
 
               <div className="relative ml-3">
-                <form action="" method="get">
+                <form onSubmit={handleSubmit}>
                   <div className="relative">
                     <input
-                      type="text"
-                      name="q"
-                      id="search"
+        name="query"
+        value={query}
+        onChange={handleChange}
                       className="p-2 pl-8 rounded border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800
                       text-gray-600 dark:text-gray-200
                        focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
@@ -79,9 +86,9 @@ function Navbar() {
                       stroke="currentColor"
                     >
                       <path
-                        stroke-linecap="round"
+                        strokeLinecap="round"
                         strokeLinejoin="round"
-                        stroke-width="2"
+                        strokeWidth="2"
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                       />
                     </svg>
@@ -98,7 +105,7 @@ function Navbar() {
                       className="inline-flex items-center px-3 py-2 
                     text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white 
                     border border-transparent rounded-md dark:text-gray-200 dark:bg-gray-600 hover:bg-gray-50 
-                    dark:hover:bg-gray-900 hover:text-gray-800 dark:hover:text-gray-100 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-900 active:bg-gray-50"
+                    dark:hover:bg-gray-900 hover:text-gray-800 dark:hover:text-gray-100 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-900"
                     >
                       Options{" "}
                       <svg
@@ -108,9 +115,9 @@ function Navbar() {
                         fill="currentColor"
                       >
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                         ></path>
                       </svg>
                     </button>
@@ -146,66 +153,7 @@ function Navbar() {
                         </Link>
                       </div>
 
-                      <div className="border-t border-gray-100 dark:border-gray-600"></div>
-                      <div className="block px-4 py-2 text-xs text-gray-400">
-                        {" "}
-                        Resources
-                      </div>
-
-                      <div>
-                        <Link
-                          to="/api/?format=json"
-                          className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100"
-                        >
-                          <div className="flex items-center">
-                            <svg
-                              className="w-5 h-5 mr-2 text-teal-400"
-                              fill="none"
-                              stroke-linecap="round"
-                              strokeLinejoin="round"
-                              stroke-width="2"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <rect
-                                x="3"
-                                y="3"
-                                width="18"
-                                height="18"
-                                rx="2"
-                                ry="2"
-                              ></rect>
-                              <rect x="7" y="7" width="3" height="9"></rect>
-                              <rect x="14" y="7" width="3" height="5"></rect>
-                            </svg>
-                            <div>API</div>
-                          </div>
-                        </Link>
-                      </div>
-
-                      <div>
-                        <Link
-                          to="/feed/rss"
-                          className="block w-full px-4 py-2 text-sm leading-5 text-left text-gray-700 transition duration-150 ease-in-out dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100"
-                        >
-                          <div className="flex items-center">
-                            <svg
-                              className="w-5 h-5 mr-2 text-teal-400"
-                              fill="none"
-                              stroke-linecap="round"
-                              strokeLinejoin="round"
-                              stroke-width="2"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path d="M4 11a9 9 0 0 1 9 9"></path>
-                              <path d="M4 4a16 16 0 0 1 16 16"></path>
-                              <circle cx="5" cy="19" r="1"></circle>
-                            </svg>
-                            <div>Sitemap</div>
-                          </div>
-                        </Link>
-                      </div>
+                
                     </div>
                   </div>
                 </div>
@@ -216,8 +164,8 @@ function Navbar() {
 
             <div className="flex items-center -mr-2 sm:hidden">
               <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="p-2 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md dark:text-yellow-400 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-yellow-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50"
+              onClick={toggleTheme}
+                className="p-2 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md dark:text-yellow-400 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-yellow-300 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700"
               >
                 <svg
                   className="w-5 h-5"
@@ -226,9 +174,9 @@ function Navbar() {
                   fill="currentColor"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   ></path>
                 </svg>
               </button>
@@ -245,16 +193,16 @@ function Navbar() {
                 >
                   <path
                     className="inline-flex"
-                    stroke-linecap="round"
+                    strokeLinecap="round"
                     strokeLinejoin="round"
-                    stroke-width="2"
+                    strokeWidth="2"
                     d="M4 6h16M4 12h16M4 18h16"
                   ></path>
                   <path
                     className="hidden"
-                    stroke-linecap="round"
+                    strokeLinecap="round"
                     strokeLinejoin="round"
-                    stroke-width="2"
+                    strokeWidth="2"
                     d="M6 18L18 6M6 6l12 12"
                   ></path>
                 </svg>
@@ -269,12 +217,12 @@ function Navbar() {
           <div className="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
             <div className="mt-3 space-y-1">
               <div className="block w-full pb-2 pl-3 pr-4">
-                <form action="" method="get">
+                <form onSubmit={handleSubmit}>
                   <div className="relative">
                     <input
-                      type="text"
-                      name="q"
-                      id="search"
+        name="query"
+        value={query}
+        onChange={handleChange}
                       className="p-2 pl-8 rounded border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800
                   text-gray-600 dark:text-gray-200
                    focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
@@ -288,9 +236,9 @@ function Navbar() {
                       stroke="currentColor"
                     >
                       <path
-                        stroke-linecap="round"
+                        strokeLinecap="round"
                         strokeLinejoin="round"
-                        stroke-width="2"
+                        strokeWidth="2"
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                       />
                     </svg>
@@ -300,71 +248,18 @@ function Navbar() {
 
               <div className="block px-4 py-2 text-xs text-gray-400">Other Pages</div>
               <Link
-                  className="block py-2 pl-3 pr-4 text-sm dark:hover:bg-gray-600 font-medium text-gray-600 transition duration-150 ease-in-out border-l-4 border-transparent dark:text-gray-200 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300"
+                  className="block py-2 pl-3 pr-4 text-sm dark:hover:bg-gray-600 font-medium text-gray-600 transition duration-150 ease-in-out border-l-4 border-transparent dark:text-gray-200 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 dark:focus:bg-gray-700 focus:border-gray-300"
                   to="/"
                 >
                   Home
                 </Link>
                 <Link
-                  className="block py-2 pl-3 pr-4 text-sm dark:hover:bg-gray-600 font-medium text-gray-600 transition duration-150 ease-in-out border-l-4 border-transparent dark:text-gray-200 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300"
+                  className="block py-2 pl-3 pr-4 text-sm dark:hover:bg-gray-600 font-medium text-gray-600 transition duration-150 ease-in-out border-l-4 border-transparent dark:text-gray-200 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 dark:focus:bg-gray-700 focus:border-gray-300"
                   to="/new-post"
                 >
                   Add New
                 </Link>
-              <div className="border-t border-gray-200 dark:border-gray-600"></div>
-              <div className="block px-4 py-2 text-xs text-gray-400">
-                Resources
-              </div>
-
-              <Link
-                to="/api/?format=json"
-                className="block w-full py-2 pl-3 pr-4 text-sm dark:hover:bg-gray-600 font-medium text-left text-gray-600 transition duration-150 ease-in-out border-l-4 border-transparent dark:text-gray-200 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300"
-              >
-                <div className="flex items-center">
-                  <svg
-                    className="w-5 h-5 mr-2 text-teal-400"
-                    fill="none"
-                    stroke-linecap="round"
-                    strokeLinejoin="round"
-                    stroke-width="2"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <rect
-                      x="3"
-                      y="3"
-                      width="18"
-                      height="18"
-                      rx="2"
-                      ry="2"
-                    ></rect>
-                    <rect x="7" y="7" width="3" height="9"></rect>
-                    <rect x="14" y="7" width="3" height="5"></rect>
-                  </svg>
-                  <div>API</div>
-                </div>
-              </Link>
-              <Link
-                to="/sitemap.xml"
-                className="block w-full py-2 pl-3 pr-4 text-sm dark:hover:bg-gray-600 font-medium text-left text-gray-600 transition duration-150 ease-in-out border-l-4 border-transparent dark:text-gray-200 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300"
-              >
-                <div className="flex items-center">
-                  <svg
-                    className="w-5 h-5 mr-2 text-teal-400"
-                    fill="none"
-                    stroke-linecap="round"
-                    strokeLinejoin="round"
-                    stroke-width="2"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M4 11a9 9 0 0 1 9 9"></path>
-                    <path d="M4 4a16 16 0 0 1 16 16"></path>
-                    <circle cx="5" cy="19" r="1"></circle>
-                  </svg>
-                  <div>Sitemap</div>
-                </div>
-              </Link>
+           
             </div>
           </div>
         </div>

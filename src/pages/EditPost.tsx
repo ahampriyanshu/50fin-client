@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getPost } from '../services/api';
+import { getPost } from '../api';
 
 const Edit = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
-
   useEffect(() => {
-    fetchPost();
-  }, []);
+    const fetchPost = async () => {
+      try {
+        const response = await getPost(id);
+        setPost(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-  const fetchPost = async () => {
-    try {
-      const response = await getPost(id);
-      setPost(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    fetchPost();
+  }, [fetchPost]);
+
+
 
   return (
     <div>

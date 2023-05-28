@@ -1,5 +1,4 @@
 import React, {
-  DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS,
   useEffect,
   useState,
 } from "react";
@@ -10,64 +9,40 @@ import { useParams } from "react-router-dom";
 import NotFound from "./NotFound";
 import { truncateText } from "../utils";
 import PostCard from "../components/PostCard";
-
-const Pagination = ({ page, totalPages }) => {
-  const { pageNumber } = useParams();
-
-  return (
-    <div className="font-sans flex md:mt-8 justify-between text-gray-600 dark:text-gray-400 content-center px-4 mt-5">
-      {page > 2 && (
-        <div className="text-left">
-          <Link to={`/page/${page}`}>
-            <span className="text-sm md:text-base font-normal no-underline hover:underline">
-              &lt; Previous Page
-            </span>
-            <br />
-          </Link>
-        </div>
-      )}
-      <div className="text-center mx-auto">
-        <span className="text-sm md:text-base font-normal">
-          Page {pageNumber} of {totalPages}
-        </span>
-        <br />
-      </div>
-      {page < 10 && (
-        <div className="text-right">
-          <Link to={`/page/${page}`}>
-            <span className="text-sm md:text-base font-normal no-underline hover:underline">
-              Next Page &gt;
-            </span>
-            <br />
-          </Link>
-        </div>
-      )}
-    </div>
-  );
-};
+import { Loader } from "../components/Loader";
 
 const Home: React.FC = () => {
   const { pageNumber } = useParams();
-  const [postList, setPostList] = useState<PostListResponse[]>([]);
-  const [posts, setPosts] = useState<PostListResponse[]>([]);
+  const searchQuery = new URLSearchParams(location.search).get('query');
+  const [isLoading, setIsLoading] = useState(true);
+  const [postList, setPostList] = useState<PostListResponse>();
 
-  const fetchPosts = async () => {
-    try {
-      const queryParams = { page: pageNumber || 1 };
-      const response = await getPosts(queryParams);
-      setPosts(response.data);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
 
   useEffect(() => {
+    console.log(pageNumber, searchQuery)
+    const fetchPosts = async () => {
+      try {
+        const queryParams = { page: pageNumber || 1, search: searchQuery || '' };
+        const response = await getPosts(queryParams);
+        setPostList(response);
+        console.log(response);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false);
+      }
+    };
     fetchPosts();
-  }, []);
+  }, [pageNumber, searchQuery]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="mt-4">
+      {!searchQuery && !pageNumber &&
       <div className="text-center mb-12">
         <h1 className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
           Welcome to
@@ -94,66 +69,16 @@ const Home: React.FC = () => {
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              fill-rule="evenodd"
+              fillRule="evenodd"
               d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-              clip-rule="evenodd"
+              clipRule="evenodd"
             ></path>
           </svg>
         </Link>
       </div>
+}
 
-      <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-        {!posts.length && (
-          <NotFound text="No result found for the given query" />
-        )}
-        {posts.map((post) => {
-          const { title, slug, body, created_at } = post;
-          return (
-            <li key={slug} className="py-12">
-              <article>
-                <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                  <dl>
-                    <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                      {new Date(created_at).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </dd>
-                  </dl>
-                  <div className="space-y-5 xl:col-span-3">
-                    <div className="space-y-6">
-                      <div>
-                        <h2 className="text-2xl font-bold leading-8 tracking-tight">
-                          <Link
-                            to={`/posts/${slug}`}
-                            className="text-gray-900 dark:text-gray-100"
-                          >
-                            {title}
-                          </Link>
-                        </h2>
-                      </div>
-                      <div className="prose max-w-none text-gray-600 dark:text-gray-400">
-              
-                        {truncateText(body)}
-                      </div>
-                    </div>
-                    <div className="text-base font-medium leading-6">
-                      <Link
-                        to={`/posts/${slug}`}
-                        className="text-teal-500 hover:text-teal-600 dark:hover:text-teal-400 no-underline"
-                        aria-label={`Read "${title}"`}
-                      >
-                        Read more &rarr;
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            </li>
-          );
-        })}
-      </ul>
+<PostCard posts={postList.data} />
 
 
     </div>

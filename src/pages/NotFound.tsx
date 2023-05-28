@@ -1,57 +1,25 @@
 import { Link } from "react-router-dom";
 
-const NotFound = ({text = 'No such page exists'}) => {
+const NotFound = ({text = `Sorry this page doesn't exists!`}) => {
   return (
-    <div className="container flex flex-col mt-12 md:mt-24 items-center justify-center text-gray-700">
-        <div className="text-5xl py-2 md:py-4 text-gray-900 dark:text-gray-100 font-bold">{text}</div>
-        <div className="p-4">
-        <svg height="256" width="256" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"  x="0px" y="0px" viewBox="0 0 512 512"  xmlSpace="preserve">
-                                                                                                        <path style={{fill: '#F9572B' }} d="M512,95.39v321.221C512,435.1,497,450.1,478.5,450.1H33.488C14.989,450.1,0,435.099,0,416.612V95.39
-                      c0-18.5,14.989-33.488,33.488-33.488h445.013C497,61.901,512,76.891,512,95.39z"/>
-                <path style={{fill: '#EAEAEA' }} d="M512,95.388v52.585H0.002V95.388c0-18.5,14.989-33.488,33.488-33.488H478.5
-                      C497,61.899,512,76.888,512,95.388z"/>
-                <circle style={{fill: '#F9572B' }} cx="53.353" cy="104.092" r="17.248"/>
-                <circle style={{fill: '#FCC63D' }} cx="111.428" cy="104.092" r="17.248"/>
-                <circle style={{fill: '#45B8C4' }} cx="169.493" cy="104.092" r="17.248"/>
-                <g>
-                    <path style={{fill: '#FCC63D' }} d="M121.441,340.797H65.466c-5.831,0-10.261-3.965-10.261-10.729
-                            c0-1.865,30.783-114.747,30.783-114.747c2.799-5.832,7.93-7.93,12.827-7.93c5.363,0,18.817,3.62,18.817,10.616
-                            c0,1.166,0.057,3.61-0.644,5.009l-22.835,89.559h27.289v-24.488c0-6.764,7.696-9.562,15.159-9.562c7.698,0,15.16,2.799,15.16,9.562
-                            v24.488h10.961c6.298,0,9.563,6.998,9.563,14.227c0,6.997-4.665,13.993-9.563,13.993h-10.961v27.521
-                            c0,6.298-7.464,9.562-15.16,9.562c-7.464,0-15.159-3.265-15.159-9.562L121.441,340.797L121.441,340.797z"/>
-                    <path style={{fill: '#FCC63D' }} d="M405.95,340.797h-55.975c-5.831,0-10.261-3.965-10.261-10.729
-                            c0-1.865,30.783-114.747,30.783-114.747c2.799-5.832,7.93-7.93,12.827-7.93c5.363,0,18.817,3.62,18.817,10.616
-                            c0,1.166,0.057,3.61-0.644,5.009l-22.835,89.559h27.289v-24.488c0-6.764,7.696-9.562,15.159-9.562c7.698,0,15.16,2.799,15.16,9.562
-                            v24.488h10.961c6.298,0,9.563,6.998,9.563,14.227c0,6.997-4.665,13.993-9.563,13.993H436.27v27.521
-                            c0,6.298-7.464,9.562-15.16,9.562c-7.464,0-15.159-3.265-15.159-9.562L405.95,340.797L405.95,340.797z"/>
-                    <path style={{fill: '#FCC63D' }} d="M198.919,325.87V260.8c0-38.949,23.788-53.409,54.575-53.409c30.785,0,54.807,14.459,54.807,53.409
-                        v65.07c0,38.949-24.022,53.409-54.807,53.409C222.707,379.279,198.919,364.819,198.919,325.87z M277.981,260.8
-                        c0-18.425-9.329-26.821-24.488-26.821c-15.393,0-24.255,8.396-24.255,26.821v65.07c0,18.425,8.862,26.82,24.255,26.82
-                        c15.159,0,24.488-8.396,24.488-26.82V260.8z"/>
-                </g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-                <g></g>
-            </svg>
-        </div>
-      
-            <Link to="/" type="button" className="px-4 inline py-2 text-sm font-medium leading-5 shadow text-white transition-colors duration-150 border border-transparent rounded-lg focus:outline-none focus:shadow-outline-teal-500 bg-teal-600 active:bg-teal-600 hover:bg-teal-700">
-              Reach Home</Link>
+    <div className="flex flex-col items-start justify-start md:mt-24 md:flex-row md:items-center md:justify-center md:space-x-6">
+      <div className="space-x-2 pt-6 pb-8 md:space-y-5">
+        <h1 className="text-6xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 md:border-r-2 md:px-6 md:text-8xl md:leading-14">
+          404
+        </h1>
+      </div>
+      <div className="max-w-md">
+        <p className="mb-4 text-xl font-bold leading-normal md:text-2xl dark:text-gray-200">
+          {text}
+        </p>
+        <Link to="/">
+          <button className="focus:shadow-outline-teal inline rounded-lg border border-transparent bg-teal-600 px-4 py-2 text-sm font-medium leading-5 text-white shadow transition-colors duration-150 hover:bg-teal-700 focus:outline-none dark:hover:bg-teal-500">
+            Back to homepage
+          </button>
+        </Link>
+      </div>
     </div>
-  )
-  ;
+  );
 };
 
 export default NotFound;
