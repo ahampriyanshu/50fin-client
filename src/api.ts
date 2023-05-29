@@ -45,10 +45,20 @@ export const createPost = async (data: CreatePostData): Promise<PostInterface> =
     throw new Error(error.response.data);
   }
 };
+export const updatePost = async (id: string, data: CreatePostData): Promise<PostInterface> => {
+  try {
+    const response: AxiosResponse<PostInterface> = await axiosInstance.put(`/posts/${id}`, data);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response.data);
+  }
+};
 
-export const updatePost = async (
-  id: string,
-  data: CreatePostData
-): Promise<AxiosResponse<PostListResponse>> => {
-  return axios.put(`/api/v1/posts/${id}`, data);
+export const deletePost = async (id: string): Promise<null> => {
+  try {
+    const response: AxiosResponse<null> = await axiosInstance.delete(`/posts/${id}`);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response.data);
+  }
 };

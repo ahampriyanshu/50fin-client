@@ -6,8 +6,7 @@ import { Link } from "react-router-dom";
 import { getPosts } from "../api";
 import { PostListResponse } from "../types";
 import { useParams } from "react-router-dom";
-import NotFound from "./NotFound";
-import { truncateText } from "../utils";
+import { Pagination } from "../components/Pagination";
 import PostCard from "../components/PostCard";
 import { Loader } from "../components/Loader";
 
@@ -17,16 +16,12 @@ const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [postList, setPostList] = useState<PostListResponse>();
 
-
-
   useEffect(() => {
-    console.log(pageNumber, searchQuery)
     const fetchPosts = async () => {
       try {
         const queryParams = { page: pageNumber || 1, search: searchQuery || '' };
         const response = await getPosts(queryParams);
         setPostList(response);
-        console.log(response);
         setIsLoading(false);
       } catch (error) {
         console.log(error);
@@ -78,8 +73,8 @@ const Home: React.FC = () => {
       </div>
 }
 
-<PostCard posts={postList.data} />
-
+<PostCard posts={postList?.data} />
+<Pagination pageNumber={pageNumber} metadata={postList?.metadata} searchQuery={searchQuery} />
 
     </div>
   );

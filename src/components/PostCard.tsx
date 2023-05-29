@@ -7,8 +7,8 @@ import { truncateText, sanitizedHTML, getReadableData } from "../utils";
 const PostCard = ({ posts }: { posts: PostInterface[] }) => {
   return (
     <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-      {!posts.length && <NotFound text="No result found for the given query" />}
-      {posts.map((post) => {
+      {!posts?.length && <NotFound text="No result found for the given query" />}
+      {posts?.map((post) => {
         const { title, slug, body, created_at } = post;
         return (
           <li key={slug} className="py-12">

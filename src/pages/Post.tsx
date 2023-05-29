@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
 import { getPost } from "../api";
-import FAB from "../components/FAB";
 import { getReadableData } from "../utils";
 import { Loader } from "../components/Loader";
 import NotFound from "./NotFound";
+import { deletePost } from "../api";
 import {
   PostInterface,
   SinglePostResponse,
@@ -15,6 +14,7 @@ import { truncateText } from "../utils";
 
 const Post = () => {
   const { identifier } = useParams();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true); 
   const [responseData, setResponseDate] = useState<SinglePostResponse>();
   const [postData, setPostData] = useState<PostInterface>();
@@ -25,7 +25,6 @@ const Post = () => {
         const response = await getPost(String(identifier));
         setPostData(response.data);
         setResponseDate(response);
-        console.log(response)
         setIsLoading(false);
       } catch (error) {
         console.log(error);
@@ -35,6 +34,19 @@ const Post = () => {
     fetchPost();
   }, [identifier]);
 
+  const handleDelete = async () => {
+    try {
+      const response = await deletePost(postData?.id);
+      toast.success("Post deleted successfully");
+      navigate('/');
+    } catch (error) {
+      toast.success("Some err occured!");
+      console.log(error);
+    }
+  }
+
+  const handleUpdate = () => navigate(`/posts/${postData?.id}/edit`);
+
   if (isLoading) {
     return <Loader />;
   }
@@ -43,7 +55,16 @@ const Post = () => {
     <div>
       {postData ? (
         <div>
-          <FAB />
+          
+<div className="fixed z-50 bottom-4 right-4">
+            
+            <button onClick={handleUpdate} className="mr-4 focus:shadow-outline-teal inline rounded-lg border border-transparent bg-teal-600 px-4 py-2 text-sm font-medium leading-5 text-white shadow transition-colors duration-150 hover:bg-teal-700 focus:outline-none dark:hover:bg-teal-500">
+            Update
+          </button>
+            <button onClick={handleDelete} className="focus:shadow-outline-red inline rounded-lg border border-transparent bg-red-600 px-4 py-2 text-sm font-medium leading-5 text-white shadow transition-colors duration-150 hover:bg-red-700 focus:outline-none dark:hover:bg-red-500">
+            Delete
+          </button>
+</div>
           <article>
             <div>
               <Link to="/">

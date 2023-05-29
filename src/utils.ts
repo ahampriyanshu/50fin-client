@@ -18,7 +18,7 @@ export const getDefaultTheme = () => {
     const userMedia = window.matchMedia('(prefers-color-scheme: dark)');
     if (userMedia.matches) return 'dark';
   }
-  return 'light';
+  return 'dark';
 }
 
 export const sanitizedHTML = (html: string) => html.replace(/<[^>]+>/g, "")

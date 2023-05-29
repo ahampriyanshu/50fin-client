@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createPost } from "../api";
 import toast from "react-hot-toast";
+import { createPost } from "../api";
 import { sanitizedHTML } from "../utils";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -23,8 +23,10 @@ const NewPost = () => {
     try {
       toast.dismiss();
       const res = await createPost({ title, body });
-      toast.success("Post Saved Successfully");
-      navigate(`/posts/${res?.slug}`, { state: { message: 'Post saved successfully' } });
+      toast.success("Post saved successfully");
+      navigate(`/posts/${res?.slug}`, {
+        state: { message: "Post saved successfully" },
+      });
     } catch (error) {
       toast.dismiss();
       console.log(error);
@@ -69,7 +71,7 @@ const NewPost = () => {
 
         <button
           type="submit"
-          className="mt-12 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          className="mt-12 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
         >
           Add New Post
         </button>

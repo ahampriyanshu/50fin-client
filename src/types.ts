@@ -31,8 +31,8 @@ export interface PostListResponse {
 }
 
 export interface CreatePostData {
-  title: string;
-  body: string;
+  title?: string;
+  body?: string;
 }
 
 export interface PostQueryArgs {

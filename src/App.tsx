@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import Navbar from './components/Navbar/Navbar';
+import Navbar from './components/Navbar';
 import Footer from "./components/Footer";
 import {Loader} from "./components/Loader";
 const NotFound = lazy(() => import("./pages/NotFound"));
