@@ -27,7 +27,7 @@ function Navbar() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate(`/page/1/?query=${encodeURIComponent(query)}`);
+    navigate(`/page/1/?query=${encodeURIComponent(query?.toLowerCase())}`);
   };
 
   const handleChange = (e) => {

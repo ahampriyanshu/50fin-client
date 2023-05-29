@@ -1,53 +1,75 @@
-import axios, {AxiosResponse} from 'axios'; 
- import { SinglePostResponse, PostListResponse, CreatePostData, PostInterface } from './types';
-  
-//  const baseDomain = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_DEV_SERVER : process.env.REACT_APP_PROD_SERVER; 
-  
-const axiosInstance = axios.create({ 
-   baseURL: `https://five0fin.onrender.com/api`, 
-}); 
-  
-  
- export const serializeQuery = (query: any) => { 
-   return Object.keys(query) 
-     .map( 
-       (key) => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`, 
-     ) 
-     .join('&'); 
- };
+import axios, { AxiosResponse } from "axios";
+import {
+  SinglePostResponse,
+  PostListResponse,
+  CreatePostData,
+  PostInterface,
+} from "./types";
 
- export const getPosts = async (queryParams: object): Promise<PostListResponse[]> => {
+//  const baseDomain = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_DEV_SERVER : process.env.REACT_APP_PROD_SERVER;
+
+const axiosInstance = axios.create({
+  baseURL: `https://five0fin.onrender.com/api`,
+});
+
+export const serializeQuery = (query: any) => {
+  return Object.keys(query)
+    .map(
+      (key) => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`
+    )
+    .join("&");
+};
+
+export const getPosts = async (
+  queryParams: object
+): Promise<PostListResponse[]> => {
   try {
     const query = serializeQuery({ ...queryParams });
-    const response: AxiosResponse<PostListResponse[]> = await axiosInstance.get(`/posts/?${query}`);
+    const response: AxiosResponse<PostListResponse[]> = await axiosInstance.get(
+      `/posts/?${query}`
+    );
     const data: PostListResponse[] = response.data;
     return data;
-
   } catch (error: any) {
     throw new Error(error.response.data);
   }
 };
 
-export const getPost = async (identifier: string): Promise<SinglePostResponse> => {
+export const getPost = async (
+  identifier: string
+): Promise<SinglePostResponse> => {
   try {
-    const response: AxiosResponse<SinglePostResponse> = await axiosInstance.get(`/posts/${identifier}`);
+    const response: AxiosResponse<SinglePostResponse> = await axiosInstance.get(
+      `/posts/${identifier}`
+    );
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data);
   }
 };
 
-export const createPost = async (data: CreatePostData): Promise<PostInterface> => {
+export const createPost = async (
+  data: CreatePostData
+): Promise<PostInterface> => {
   try {
-    const response: AxiosResponse<PostInterface> = await axiosInstance.post('/posts/', data);
+    const response: AxiosResponse<PostInterface> = await axiosInstance.post(
+      "/posts/",
+      data
+    );
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data);
   }
 };
-export const updatePost = async (id: string, data: CreatePostData): Promise<PostInterface> => {
+export const updatePost = async (
+  id: string,
+  data: CreatePostData
+): Promise<PostInterface> => {
   try {
-    const response: AxiosResponse<PostInterface> = await axiosInstance.put(`/posts/${id}`, data);
+    const response: AxiosResponse<PostInterface> = await axiosInstance.put(
+      `/posts/${id}`,
+      data
+    );
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data);
@@ -56,7 +78,9 @@ export const updatePost = async (id: string, data: CreatePostData): Promise<Post
 
 export const deletePost = async (id: string): Promise<null> => {
   try {
-    const response: AxiosResponse<null> = await axiosInstance.delete(`/posts/${id}`);
+    const response: AxiosResponse<null> = await axiosInstance.delete(
+      `/posts/${id}`
+    );
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data);
