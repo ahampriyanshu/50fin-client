@@ -15,7 +15,6 @@ export const Pagination: React.FC<PaginationProps> = ({
 }) => {
   const totalPages = Math.ceil(metadata.results / metadata.limit);
   const currentPage = Number(pageNumber) || 1;
-  console.log(currentPage, totalPages);
   return (
     <div className="w-full text-gray-600 dark:text-gray-400">
       {currentPage > 1 && (

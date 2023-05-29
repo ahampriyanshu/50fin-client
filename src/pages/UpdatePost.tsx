@@ -1,14 +1,16 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-import { createPost } from "../api";
+import { updatePost, getPost } from "../api";
 import { sanitizedHTML } from "../utils";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-const NewPost = () => {
+const UpdatePost = () => {
+  const { id } = useParams();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -22,7 +24,7 @@ const NewPost = () => {
 
     try {
       toast.dismiss();
-      const res = await createPost({ title, body });
+      const res = await updatePost(id, { title, body });
       toast.success("Post saved successfully");
       navigate(`/posts/${res?.slug}`, {
         state: { message: "Post saved successfully" },
@@ -33,6 +35,21 @@ const NewPost = () => {
       toast.error("Some err occured!");
     }
   };
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await getPost(String(id));
+        setTitle(response.data.title);
+        setBody(response.data.body);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+        setIsLoading(true);
+      }
+    };
+    fetchPost();
+  }, [id]);
 
   return (
     <div>
@@ -70,14 +87,15 @@ const NewPost = () => {
         </div>
 
         <button
+          disabled={isLoading}
           type="submit"
           className="mt-12 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
         >
-          Add New Post
+          Update Post
         </button>
       </form>
     </div>
   );
 };
 
-export default NewPost;
+export default UpdatePost;

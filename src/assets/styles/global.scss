@@ -1,6 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,400;0,600;0,700;0,800;1,100;1,300;1,400;1,500;1,600&display=swap");
-
-
 * {
   box-sizing: border-box;
   padding: 0;
@@ -32,12 +30,3 @@ html.dark{
   color: #000;
   background: #81e6d9;
 }
-.content-container{
-	width: 60%;
-	margin: auto;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: flex-start;
-}
-

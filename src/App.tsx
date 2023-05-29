@@ -8,7 +8,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const Home = lazy(() => import("./pages/Home"));
 const NewPost = lazy(() => import("./pages/NewPost"));
 const Post = lazy(() => import("./pages/Post"));
-const EditPost = lazy(() => import("./pages/EditPost"));
+const UpdatePost = lazy(() => import("./pages/UpdatePost"));
 import './assets/styles/global.scss'
 
 
@@ -24,7 +24,7 @@ function App(): JSX.Element {
       <Route path="/page/:pageNumber" element={<Home />} />
       <Route path="/new-post" element={<NewPost />} />
       <Route path="/posts/:identifier" element={<Post />} />
-      <Route path="/posts/:data/edit" element={<EditPost />} />
+      <Route path="/posts/:id/edit" element={<UpdatePost />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
     </Suspense>
